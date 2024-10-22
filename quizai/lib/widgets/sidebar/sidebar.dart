@@ -9,33 +9,36 @@ class SideBar extends StatefulWidget {
     const SideBar({super.key});
 
     @override
-    State<SideBar> createState() => _SideBarState();
+        State<SideBar> createState() => _SideBarState();
 }
 
 class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<SideBar>{
+
+    late bool isOpen;
 
     late AnimationController _animationController;
     late StreamController<bool> isOpenStreamController;
     late Stream<bool> isOpenStream;
     late StreamSink<bool> isOpenSink;
 
-    
-    @override
-      void initState() {
-          super.initState();
-          _animationController = AnimationController(vsync: this, duration: SideBarStyles.animationDuration);
-          isOpenStreamController = PublishSubject<bool>();
-          isOpenStream = isOpenStreamController.stream;
-          isOpenSink = isOpenStreamController.sink;
-      }
 
     @override
-      void dispose() {
-         _animationController.dispose();
-         isOpenStreamController.close();
-         isOpenSink.close();
-        super.dispose();
-    }
+        void initState() {
+            super.initState();
+            _animationController = AnimationController(vsync: this, duration: SideBarStyles.animationDuration);
+            isOpenStreamController = PublishSubject<bool>();
+            isOpenStream = isOpenStreamController.stream;
+            isOpenSink = isOpenStreamController.sink;
+            isOpen = false;
+        }
+
+    @override
+        void dispose() {
+            _animationController.dispose();
+            isOpenStreamController.close();
+            isOpenSink.close();
+            super.dispose();
+        }
 
     void onIconPressed() {
         final animationStatus = _animationController.status;
@@ -44,10 +47,34 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
         if (isAnimationCompleted) {
             isOpenSink.add(false);
             _animationController.reverse();
+            isOpen = false;
         } else {
             isOpenSink.add(true);
             _animationController.forward();
+            isOpen = true;
         }
+    }
+
+
+    TextButton navButton(String text, Function()? pressed, AsyncSnapshot<bool> isOpenAsync, String iconDt) {
+        return TextButton(
+                onPressed: pressed,
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.navBg,
+                    foregroundColor: AppTheme.white,
+                    fixedSize: const Size(150, 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0)
+                        )
+                    ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                    Text(text),
+                    Text(""),
+                    ]
+                    )
+                );
     }
 
     @override
@@ -61,7 +88,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                             duration: SideBarStyles.animationDuration, 
                             top: 0,
                             bottom: 0,
-                            left: isOpenAsync.data == true ? 0 : 0, 
+                            left: isOpenAsync.data == true ? 0 : 0.0-(SideBarStyles.openedNavbarWidth - SideBarStyles.closedNavbarWidth), 
                             right: isOpenAsync.data == true ? screenWidth - SideBarStyles.openedNavbarWidth : screenWidth - SideBarStyles.closedNavbarWidth,
                             child: Row(
                                 children: [
@@ -84,19 +111,21 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                                                     )
                                                 ]
                                                ),
+                                            Row(
+                                                children: [
+                                                isOpenAsync.data == true && isOpen == true?
+                                                navButton("text", () {}, isOpenAsync, "") 
+                                                : const Icon(Icons.home),
+                                                
+                                                ]
+                                               )
                                             ]
                                             )
-                                        ),
-                                        ),
-//                                        SizedBox(
-//                                                width: isOpenAsync.data == true ? screenWidth - SideBarStyles.openedNavbarWidth : 0,
-//                                                child: Container(
-//                                                    color: const Color(0x00000000),
-//                                                    ),
-//                                                ),
-                                        ]
-                                            )
-                                            );
+                                            ),
+                                            ),
+                                            ]
+                                                )
+                                                );
                     }
             );
         }

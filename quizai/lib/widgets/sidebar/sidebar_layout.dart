@@ -9,7 +9,7 @@ class SideBarLayout extends StatelessWidget {
             return const Scaffold( 
                     body: Stack(
                         children: <Widget> [
-                        HomeScreen(),
+                        
                         SideBar(),
                         ]
                         ),
