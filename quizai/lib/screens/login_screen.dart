@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quizai/utils/app_styles.dart';
 import 'package:quizai/screens/home_screen.dart';
-import 'package:quizai/widgets/sidebar/sidebar_layout.dart';
+import 'package:quizai/utils/app_styles.dart';
 
 class LoginScreen extends StatefulWidget {
     const LoginScreen({super.key});
@@ -65,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     _mainButton(() {
                                         Navigator.push(
                                                 context,
-                                                MaterialPageRoute(builder: (context) => SideBarLayout())
+                                                MaterialPageRoute(builder: (context) => const HomeScreen(title: "QuizAI"))
                                                 );
                                         }, 'Button'),
                                     ],
@@ -76,12 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
         }
 
-    ElevatedButton _mainButton(Function()? onPressedf,String data) {
-        return ElevatedButton(
-                onPressed: onPressedf,
-                child: Text(data)
-                );
-    }
     TextField textField(){
         return TextField(
             decoration: const InputDecoration(
@@ -89,5 +82,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 labelText: 'Enter your username',
             ),
         );
+    }
+    ElevatedButton _mainButton(Function()? onPressedf,String data) {
+        return ElevatedButton(
+                onPressed: onPressedf,
+                child: Text(data)
+                );
     }
 }

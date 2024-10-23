@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizai/screens/quiz_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 
 
@@ -16,7 +17,6 @@ enum Anwsers {A, B, C, D, N}
 class _HomeScreenState extends State<HomeScreen> {
 
     int _selectedIndex = 0;
-    int _selectedQuestion = 1;
     Anwsers? _anwser = Anwsers.N;
 
     static const TextStyle optionStyle =
@@ -29,62 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
     }
 
-    Widget questionIndicatorButton(int questionNumber) {
-        return Padding(
-                padding: const EdgeInsets.all(5),
-                child: IconButton(
-                    style: IconButton.styleFrom(
-                        backgroundColor: questionNumber == _selectedQuestion? AppTheme.accent : AppTheme.secondary,
-                        ),
-                    constraints: const BoxConstraints(minWidth: 20, maxWidth: 25, minHeight: 10, maxHeight: 10),
-                    icon: Container(),
-                    onPressed: () {
-                    setState(() {
-                            _selectedQuestion = questionNumber;
-                            });
-                    },
-                    ),
-                );
-    }
-
-    Widget bottomButton(String text, IconData icon, IconAlignment iconAlignment, VoidCallback? pressed) {
-        return ElevatedButton.icon(
-                label: Text(text, style: TextStyle(color: AppTheme.white)),
-                icon: Icon(icon, color: AppTheme.white),
-                iconAlignment: iconAlignment,
-                onPressed: pressed,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.accent,
-                    )
-                );
-    }
-
-    Widget radioListButton(BuildContext context, String text, Anwsers val) {
-        return Material(
-                child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: AppTheme.primary,
-                            width: 3,
-                            )
-                        ),
-                    child: RadioListTile<Anwsers>(
-                        tileColor: AppTheme.secondary,
-                        selectedTileColor: AppTheme.accent,
-                        activeColor: AppTheme.accent,
-                        title: Text(text, style: const TextStyle(color: AppTheme.white)),
-                        value: val,
-                        groupValue: _anwser,
-                        onChanged: (Anwsers? value) {
-                        setState(() {
-                                _anwser = value;
-                                });
-                        },
-                        ),
-                    ),
-                    );
-    }
-
     List<Widget> buildList(BuildContext context) {
         return <Widget>[
             const Text(
@@ -92,86 +36,107 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: optionStyle,
                     ),
                   Padding(
-                          padding: EdgeInsets.only(top: 20, bottom: 20, left: 200, right: 200),
-                          child: Container(
-                              color: AppTheme.primary,
-                              child: Padding(
-                              padding: EdgeInsets.all(20),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children:[
-                                    Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                        questionIndicatorButton(1),
-                                        questionIndicatorButton(2),
-                                        questionIndicatorButton(3),
-                                        questionIndicatorButton(4),
-                                        questionIndicatorButton(5),
-                                        questionIndicatorButton(6),
-                                        questionIndicatorButton(7),
-                                        questionIndicatorButton(8),
-                                        ]
-                                       ),
-                                    Expanded(
-                                      child: const Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text("this\n is\n some\n text\n", style: TextStyle(color: AppTheme.white, fontSize: 20))
-                                          ]
+                    padding: EdgeInsets.only(top: 20, bottom: 20, left: 200, right: 200),
+                    child: Container(
+                        color: AppTheme.dark,
+                      child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children:[
+                              const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children:
+                                  [Text("that funny thin that's shows which question is that", style: TextStyle(color: AppTheme.white))
+                                  ]
+                                  ),
+                              const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                  Text("that funny thing that shows you a question", style: TextStyle(color: AppTheme.white))
+                                  ]
+                                  ),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                  SizedBox(
+                                      height: 200,
+                                      width: 500,
+                                      child: Column(
+                                          children: <Widget>[
+                                          Material(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                  color: AppTheme.bg,
+                                                  width: 3,
+                                                  )
+                                              ),
+                                              child: RadioListTile<Anwsers>(
+                                                  tileColor: AppTheme.secondary,
+                                                  activeColor: AppTheme.accent,
+                                                  title: const Text('ODP. A', style: TextStyle(color: AppTheme.white)),
+                                                  value: Anwsers.A,
+                                                  groupValue: _anwser,
+                                                  onChanged: (Anwsers? value) {
+                                                  setState(() {
+                                                          _anwser = value;
+                                                          });
+                                                  },
+                                                  ),
+                                            ),
                                           ),
-                                    ),
-                                    Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                            SizedBox(
-                                                height: 260,
-                                                width: 500,
-                                                child: Column(
-                                                    children: <Widget>[
-                                                    radioListButton(context, "ODP. A", Anwsers.A),
-                                                    radioListButton(context, "ODP. B", Anwsers.B),
-                                                    radioListButton(context, "ODP. C", Anwsers.C),
-                                                    radioListButton(context, "ODP. D", Anwsers.D),
-                                                    ],
-                                                    )
-                                                )
-                                            ],
-                                       ),
-                                    Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children:[
-                                            Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                bottomButton("Powrót", Icons.arrow_left_outlined, IconAlignment.start                                             
-                                                , _selectedQuestion <= 1? null : () {
-                                                  setState((){_selectedQuestion--;});
-                                                   })
-                                                ]
-                                                ),
-                                            Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                bottomButton("Następne", Icons.arrow_right_outlined, IconAlignment.end, 
-                                                _selectedQuestion >= 8? null : () {
-                                                    setState((){_selectedQuestion++;});
-                                                    }),
-                                                ]
-                                                ),
-                                            ]
-                                       )
-                                       ]
-                                       ),
-                              ),
-                                     ),
-                                     ),
-                                     const Text(
-                                             'Index 2: School',
-                                             style: optionStyle,
-                                             ),
-                                     ];
+                                          Material(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                  color: AppTheme.bg,
+                                                  width: 3,
+                                                  )
+                                              ),
+                                              child: RadioListTile<Anwsers>(
+                                                  tileColor: AppTheme.secondary,
+                                                  activeColor: AppTheme.accent,
+                                                  title: const Text('ODP.B', style: TextStyle(color: AppTheme.white)),
+                                                  value: Anwsers.B,
+                                                  groupValue: _anwser,
+                                                  onChanged: (Anwsers? value) {
+                                                  setState(() {
+                                                          _anwser = value;
+                                                          });
+                                                  },
+                                                  ),
+                                            ),
+                                          ),
+                                          ],
+                                          )
+                                              )
+                                              ],
+                                              ),
+                                              const Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children:[
+                                                      Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                          Text("that funny thing called back button", style: TextStyle(color: AppTheme.white))
+                                                          ]
+                                                          ),
+                                                      Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                          Text("that funny thing called next button", style: TextStyle(color: AppTheme.white))
+                                                          ]
+                                                          ),
+                                                      ]
+                                                      )
+                                                  ]
+                                                  ),
+                    ),
+                  ),
+                                          const Text(
+                                                  'Index 2: School',
+                                                  style: optionStyle,
+                                                  ),
+                                          ];
     }
 
     @override
