@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizai/screens/history_list.dart';
+import 'package:quizai/screens/quiz_generation_screen.dart';
+import 'package:quizai/screens/quiz_list_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 
 
@@ -15,6 +17,55 @@ class HomeScreen extends StatefulWidget {
 
 enum Anwsers {A, B, C, D, N}
 class _HomeScreenState extends State<HomeScreen> {
+
+
+    // List of predefined subjects and degrees
+    final List<String> _subjects = ["Math", "Science", "History", "Geography"];
+    final List<String> _degrees = ["High School", "Bachelor's", "Master's", "PhD"];
+    final List<String> _difficulties = ["Very Easy", "Easy", "Medium", "Hard", "Very Hard"];
+
+    // Selected values
+    String? _selectedSubject;
+    String? _selectedDegree;
+    String? _selectedDifficulty;
+    int _numberOfQuestions = 10;
+
+    // Controller for custom subject input
+    final TextEditingController _customSubjectController = TextEditingController();
+
+    void _showCustomSubjectDialog() {
+        showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                    backgroundColor: AppTheme.bg,
+                    title: Text("Enter Custom Subject", style: TextStyle(color: AppTheme.primary)),
+                    content: TextField(
+                        controller: _customSubjectController,
+                        decoration: InputDecoration(
+                            hintText: "Custom Subject",
+                            hintStyle: TextStyle(color: AppTheme.secondary),
+                            ),
+                        ),
+                    actions: [
+                    TextButton(
+                        child: Text("Cancel", style: TextStyle(color: AppTheme.secondary)),
+                        onPressed: () => Navigator.pop(context),
+                        ),
+                    TextButton(
+                        child: Text("Add", style: TextStyle(color: AppTheme.primary)),
+                        onPressed: () {
+                        setState(() {
+                                _selectedSubject = _customSubjectController.text;
+                                });
+                        _customSubjectController.clear();
+                        Navigator.pop(context);
+                        },
+                        ),
+                    ],
+                    ),
+                    );
+    }
+
 
     int _selectedIndex = 0;
     double _screenWidth = 1000;
@@ -113,255 +164,170 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Index 0: Home',
                     style: optionStyle,
                     ),
-                  Padding(
-                          padding: EdgeInsets.only(top: 20, bottom: 20, left: 200, right: 200),
-                          child: Container(
-                              color: AppTheme.primary,
-                              child: Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children:[
-                                      SizedBox(
-                                          width: _quizFormWidth,
-                                          child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children:[
-                                              Text("Subject: $_subject", style:
-                                                  const TextStyle(
-                                                      color: AppTheme.accent,
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 25,
-                                                      )
-                                                  )
-                                              ]
-                                              ),
-                                          ),
-                                      Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                          questionIndicatorButton(1),
-                                          questionIndicatorButton(2),
-                                          questionIndicatorButton(3),
-                                          questionIndicatorButton(4),
-                                          questionIndicatorButton(5),
-                                          questionIndicatorButton(6),
-                                          questionIndicatorButton(7),
-                                          questionIndicatorButton(8),
-                                          ]
-                                         ),
-                                      Expanded(
-                                              child: SizedBox(
-                                                  width: _quizFormWidth,
-                                                  child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-                                                      Flexible(child: Text(_question, style: TextStyle(color: AppTheme.white, fontSize: 25)))
-                                                      ]
-                                                      ),
-                                                  ),
-                                              ),
-                                      Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                              SizedBox(
-                                                  height: 260,
-                                                  width: _quizFormWidth,
-                                                  child: Column(
-                                                      children: <Widget>[
-                                                      radioListButton(context, _anwserA, Anwsers.A),
-                                                      radioListButton(context, _anwserB, Anwsers.B),
-                                                      radioListButton(context, _anwserC, Anwsers.C),
-                                                      radioListButton(context, _anwserC, Anwsers.D),
-                                                      ],
-                                                      )
-                                                  )
-                                              ],
-                                         ),
-                                      Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children:[
-                                              Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                  bottomButton("Powrót", Icons.arrow_left_outlined, IconAlignment.start                                             
-                                                      , _selectedQuestion <= 1? null : () {
-                                                      setState((){_selectedQuestion--;});
-                                                      })
-                                                  ]
-                                                  ),
-                                              Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                  bottomButton("Następne", Icons.arrow_right_outlined, IconAlignment.end, 
-                                                      _selectedQuestion >= 8? null : () {
-                                                      setState((){_selectedQuestion++;});
-                                                      }),
-                                                  ]
-                                                  ),
-                                              ]
-                                                  )
-                                                  ]
-                                                  ),
-                                              ),
-                                              ),
-                                              ),
-                                              // history view
-                                              ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                    minWidth: 900,
-                                                    maxWidth: 1000,
-                                                    minHeight: 500,
-                                                    maxHeight: 600,
-                                                ),
-                                                child: historyList,
-                                                )
-                                              ];
+                  // Quiz Generation view
+                  ConstrainedBox(
+                          constraints: BoxConstraints(
+                              minWidth: 900,
+                              maxWidth: 1000,
+                              minHeight: 500,
+                              maxHeight: 600,
+                              ),
+                          child: QuizList(),
+                          ),// history view
+                  ConstrainedBox(
+                          constraints: BoxConstraints(
+                              minWidth: 900,
+                              maxWidth: 1000,
+                              minHeight: 500,
+                              maxHeight: 600,
+                              ),
+                          child: historyList,
+                          )
+                      ];
     }
 
-    @override
-        Widget build(BuildContext context) {
-            _screenWidth = MediaQuery.sizeOf(context).width;
-            List<Widget> widgetOptions = buildList(context);     
+@override
+Widget build(BuildContext context) {
+    _screenWidth = MediaQuery.sizeOf(context).width;
+    List<Widget> widgetOptions = buildList(context);     
 
-            return Scaffold(
-                    backgroundColor: AppTheme.bg,
-                    appBar: AppBar(
-                        backgroundColor: AppTheme.bg,
-                        title: Text(widget.title, 
-                            style: TextStyle(
-                                color: AppTheme.white,
-                                )
+    return Scaffold(
+            backgroundColor: AppTheme.bg,
+            appBar: AppBar(
+                backgroundColor: AppTheme.bg,
+                title: Text(widget.title, 
+                    style: TextStyle(
+                        color: AppTheme.white,
+                        )
+                    ),
+                leading: Builder(
+                    builder: (context) {
+                    return IconButton(
+                            icon: const Icon(Icons.menu, color: AppTheme.accent),
+                            onPressed: () {
+                            Scaffold.of(context).openDrawer();
+                            },
+                            );
+                    },
+                    ),
+                ),
+            body: Center(
+                child: widgetOptions[_selectedIndex],
+                ),
+            drawer: Drawer(
+                    backgroundColor: AppTheme.primary,
+                    // Add a ListView to the drawer. This ensures the user can scroll
+                    // through the options in the drawer if there isn't enough vertical
+                    // space to fit everything.
+                    child: ListView(
+                        // Important: Remove any padding from the ListView.
+                        padding: EdgeInsets.zero,
+                        children: [
+                        const DrawerHeader(
+                            decoration: BoxDecoration(
+                                color: AppTheme.secondary,
+                                ),
+                            child: Text('Drawer Header',
+                                style: TextStyle(
+                                    color: AppTheme.white,
+                                    )
+                                ),
                             ),
-                        leading: Builder(
-                            builder: (context) {
-                            return IconButton(
-                                    icon: const Icon(Icons.menu, color: AppTheme.accent),
-                                    onPressed: () {
-                                    Scaffold.of(context).openDrawer();
-                                    },
-                                    );
+                        ListTile(
+                            leading: const Icon(Icons.home),
+                            title: const Text('Home'),
+                            textColor: AppTheme.white,
+                            iconColor: AppTheme.white,
+                            hoverColor: AppTheme.secondary,
+                            selectedColor: AppTheme.accent,
+                            selected: _selectedIndex == 0,
+                            onTap: () {
+                            // Update the state of the app
+                            _onItemTapped(0);
+                            // Then close the drawer
+                            Navigator.pop(context);
                             },
                             ),
-                        ),
-                    body: Center(
-                        child: widgetOptions[_selectedIndex],
-                        ),
-                    drawer: Drawer(
-                            backgroundColor: AppTheme.primary,
-                            // Add a ListView to the drawer. This ensures the user can scroll
-                            // through the options in the drawer if there isn't enough vertical
-                            // space to fit everything.
-                            child: ListView(
-                                // Important: Remove any padding from the ListView.
-                                padding: EdgeInsets.zero,
-                                children: [
-                                const DrawerHeader(
-                                    decoration: BoxDecoration(
-                                        color: AppTheme.secondary,
-                                        ),
-                                    child: Text('Drawer Header',
-                                        style: TextStyle(
-                                            color: AppTheme.white,
-                                            )
-                                        ),
-                                    ),
-                                ListTile(
-                                    leading: const Icon(Icons.home),
-                                    title: const Text('Home'),
-                                    textColor: AppTheme.white,
-                                    iconColor: AppTheme.white,
-                                    hoverColor: AppTheme.secondary,
-                                    selectedColor: AppTheme.accent,
-                                    selected: _selectedIndex == 0,
-                                    onTap: () {
-                                    // Update the state of the app
-                                    _onItemTapped(0);
-                                    // Then close the drawer
-                                    Navigator.pop(context);
-                                    },
-                                    ),
-                                ListTile(
-                                        leading: const Icon(Icons.quiz),
-                                        title: const Text('Quiz'),
-                                        textColor: AppTheme.white,
-                                        iconColor: AppTheme.white,
-                                        hoverColor: AppTheme.secondary,
-                                        selectedColor: AppTheme.accent,
-                                        selected: _selectedIndex == 1,
-                                        onTap: () {
-                                        // Update the state of the app
-                                        _onItemTapped(1);
-                                        // Then close the drawer
-                                        Navigator.pop(context);
-                                        },
-                                        ),
-                                ListTile(
-                                        leading: const Icon(Icons.history),
-                                        title: const Text('History'),
-                                        textColor: AppTheme.white,
-                                        iconColor: AppTheme.white,
-                                        hoverColor: AppTheme.secondary,
-                                        selectedColor: AppTheme.accent,
-                                        selected: _selectedIndex == 2,
-                                        onTap: () {
-                                        _buildHistoryList(context);
-                                        _onItemTapped(2);
-                                        Navigator.pop(context);
-                                        }
-                                        ),
-                                const Divider(),
-                                ListTile(
-                                        leading: const Icon(Icons.settings),
-                                        title: const Text('Settings'),
-                                        textColor: AppTheme.white,
-                                        iconColor: AppTheme.white,
-                                        hoverColor: AppTheme.secondary,
-                                        selectedColor: AppTheme.accent,
-                                        selected: _selectedIndex == 3,
-                                        onTap: () {
-                                        // Update the state of the app
-                                        _onItemTapped(2);
-                                        // Then close the drawer
-                                        Navigator.pop(context);
-                                        },
-                                        ),
-                                ListTile(
-                                        leading: const Icon(Icons.logout),
-                                        title: const Text('Logout'),
-                                        textColor: AppTheme.white,
-                                        iconColor: AppTheme.white,
-                                        hoverColor: AppTheme.secondary,
-                                        selectedColor: AppTheme.accent,
-                                        selected: _selectedIndex == 4,
-                                        onTap: () {
-                                        // Update the state of the app
-                                        _onItemTapped(2);
-                                        // Then close the drawer
-                                        Navigator.pop(context);
-                                        },
-                                        ),
-                                ListTile(
-                                        leading: const Icon(Icons.exit_to_app),
-                                        title: const Text('Exit'),
-                                        textColor: AppTheme.white,
-                                        iconColor: AppTheme.white,
-                                        hoverColor: AppTheme.secondary,
-                                        selectedColor: AppTheme.accent,
-                                        selected: _selectedIndex == 5,
-                                        onTap: () {
-                                        // Update the state of the app
-                                        _onItemTapped(2);
-                                        // Then close the drawer
-                                        Navigator.pop(context);
-                                        },
-                                        ),
+                        ListTile(
+                                leading: const Icon(Icons.quiz),
+                                title: const Text('Quiz'),
+                                textColor: AppTheme.white,
+                                iconColor: AppTheme.white,
+                                hoverColor: AppTheme.secondary,
+                                selectedColor: AppTheme.accent,
+                                selected: _selectedIndex == 1,
+                                onTap: () {
+                                // Update the state of the app
+                                _onItemTapped(1);
+                                // Then close the drawer
+                                Navigator.pop(context);
+                                },
+                                ),
+                        ListTile(
+                                leading: const Icon(Icons.history),
+                                title: const Text('History'),
+                                textColor: AppTheme.white,
+                                iconColor: AppTheme.white,
+                                hoverColor: AppTheme.secondary,
+                                selectedColor: AppTheme.accent,
+                                selected: _selectedIndex == 2,
+                                onTap: () {
+                                _buildHistoryList(context);
+                                _onItemTapped(2);
+                                Navigator.pop(context);
+                                }
+                                ),
+                        const Divider(),
+                        ListTile(
+                                leading: const Icon(Icons.settings),
+                                title: const Text('Settings'),
+                                textColor: AppTheme.white,
+                                iconColor: AppTheme.white,
+                                hoverColor: AppTheme.secondary,
+                                selectedColor: AppTheme.accent,
+                                selected: _selectedIndex == 3,
+                                onTap: () {
+                                // Update the state of the app
+                                _onItemTapped(2);
+                                // Then close the drawer
+                                Navigator.pop(context);
+                                },
+                                ),
+                        ListTile(
+                                leading: const Icon(Icons.logout),
+                                title: const Text('Logout'),
+                                textColor: AppTheme.white,
+                                iconColor: AppTheme.white,
+                                hoverColor: AppTheme.secondary,
+                                selectedColor: AppTheme.accent,
+                                selected: _selectedIndex == 4,
+                                onTap: () {
+                                // Update the state of the app
+                                _onItemTapped(2);
+                                // Then close the drawer
+                                Navigator.pop(context);
+                                },
+                                ),
+                        ListTile(
+                                leading: const Icon(Icons.exit_to_app),
+                                title: const Text('Exit'),
+                                textColor: AppTheme.white,
+                                iconColor: AppTheme.white,
+                                hoverColor: AppTheme.secondary,
+                                selectedColor: AppTheme.accent,
+                                selected: _selectedIndex == 5,
+                                onTap: () {
+                                // Update the state of the app
+                                _onItemTapped(2);
+                                // Then close the drawer
+                                Navigator.pop(context);
+                                },
+                                ),
 
 
-                                ],
-                                ),
-                                ),
-                                );
-        }
+                        ],
+                        ),
+                        ),
+                        );
+}
 }

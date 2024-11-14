@@ -5,18 +5,17 @@ import 'package:quizai/utils/app_styles.dart';
 import 'package:quizai/utils/session.dart';
 
 
-class QuizScreen extends StatefulWidget {
-    const QuizScreen ({super.key, required this.id, required this.refresh});
+class QuizHistoryScreen extends StatefulWidget {
+    const QuizHistoryScreen ({super.key, required this.id});
 
         final int id ;
-        final Function refresh;
 
     @override
-        State<QuizScreen> createState() => _QuizScreenState();
+        State<QuizHistoryScreen> createState() => _QuizHistoryScreenState();
 }
 
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
    
     bool _isQuizGenerated = false;      // indicated if Api was fetched or not
     int _selectedQuestion = 0;          // id of current displayed question
@@ -28,14 +27,13 @@ class _QuizScreenState extends State<QuizScreen> {
     final double _quizFormWidth = 600;
 
 
-
     // builds questionsList from API
     void buildQuestions(Function fnc, id) async{
-        List<dynamic> response = await Session.getMultiple("api/subject/$id/generate");
+        List<dynamic> response = await Session.getMultiple("api/history/quiz/$id/questions");
         List<Question> list = [];
         
         for (var res in response) {
-                 list.add(Question().loadNewGenerated(res));
+                 list.add(Question().loadHistory(res));
                  
                 }
         fnc(list);
@@ -74,6 +72,13 @@ class _QuizScreenState extends State<QuizScreen> {
     }
 
     Widget radioListButton(BuildContext context, String text, Anwsers val) {
+        Color bg = AppTheme.secondary;
+        Color acc = Colors.red;
+
+        if (val == questionsList[_selectedQuestion].selectedAnwser) bg = Colors.red;
+        if (val == questionsList[_selectedQuestion].correctAnwser) bg = Colors.green;
+
+
         return Material(
                 child: Container(
                     decoration: BoxDecoration(
@@ -83,15 +88,14 @@ class _QuizScreenState extends State<QuizScreen> {
                             )
                         ),
                     child: RadioListTile<Anwsers>(
-                        tileColor: AppTheme.secondary,
-                        selectedTileColor: AppTheme.accent,
+                        tileColor: bg,
+                        selectedTileColor: acc, 
                         activeColor: AppTheme.accent,
                         title: Text(text, style: const TextStyle(color: AppTheme.white)),
                         value: val,
                         groupValue: questionsList[_selectedQuestion].selectedAnwser,
                         onChanged: (Anwsers? value) {
                         setState(() {
-                                questionsList[_selectedQuestion].selectedAnwser = value;
                                 });
                         },
                         ),
@@ -195,28 +199,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                                       })
                                                   ]
                                                   ),
-                                              Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    ElevatedButton(
-                                                    child: Text("Finish!", style: TextStyle(color: AppTheme.white)),
-                                                    style: ElevatedButton.styleFrom(
-                                                        backgroundColor: Colors.green,
-                                                    ),
-                                                    onPressed: () {
-                                                        Navigator.pop(context);
-                                                        Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(builder: (context) => QuizFinishedScreen(
-                                                                        quesitonList: questionsList,
-                                                                        subjectId: widget.id,
-                                                                        refresh: widget.refresh))
-                                                                );
-                                                    }
-                                                    )
-                                                  ]
-                                                  ),
-
                                               Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [

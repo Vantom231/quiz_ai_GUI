@@ -37,4 +37,19 @@ class Session {
         print("Headers: $headers");
         return response;
       }
+      
+    static Future<Map<dynamic, dynamic>> post2(String path, String body) async {
+        Uri uri = Uri(scheme: "http", host:"127.0.0.1", path:path, port:8000);
+        http.Response response = await http.post(uri, body: body, headers: headers);
+        updateCookie(response);
+        print("URI: $uri");
+        print("Headers: $headers");
+        return json.decode(response.body);
+      }
+
+    static Future<dynamic> del(String path) async{
+        Uri uri = Uri(scheme: "http", host:"127.0.0.1", path:path, port:8000);
+        http.Response response = await http.delete(uri, headers: headers);
+        return response;
+    }
 }

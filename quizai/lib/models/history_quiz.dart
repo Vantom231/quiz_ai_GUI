@@ -1,3 +1,5 @@
+import '../utils/app_utils.dart';
+
 class HistoryQuiz {
     int id = -1;
     int number = -1;
@@ -16,7 +18,7 @@ class HistoryQuiz {
     void createFromResponse(res) {
         id = res["id"];
         number = res["number"];
-        subject = res["subject"];
+        subject = AppUtils.toUtf16(res["subject"]);
         accuracy = res["accuracy"];
     }
 
@@ -28,5 +30,4 @@ class HistoryQuiz {
                 + "    accuracy = $accuracy\n\n";
         return res;
     }
-
 }

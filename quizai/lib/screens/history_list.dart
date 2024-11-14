@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:quizai/screens/history_quiz_screen.dart';
 import 'package:quizai/screens/quiz_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 import 'package:quizai/models/history_quiz.dart';
+import 'package:quizai/utils/app_utils.dart';
 import 'package:quizai/utils/session.dart';
 
 class HistoryList {
@@ -42,8 +44,10 @@ class HistoryList {
         return Container(
                 child: ListView(
                     padding: const EdgeInsets.all(8),
-                    children: <Widget>[
-                    for (int i = 0; i < quizes.length; i++) Padding(
+                    children: [
+                    Column(
+                    children:[
+                    ...quizes.map((i) { return Padding(
                         padding: EdgeInsets.all(5),
                       child: Container(
                           height: 70,
@@ -57,25 +61,25 @@ class HistoryList {
                             Row(
                                 children: [
                                 Text("number: ", style: style1),
-                                Text(quizes[i].number.toString(), style: style2),
+                                Text(i.number.toString(), style: style2),
                                 ]
                                ),
                             Row(
                                 children: [
                                 Text("Subject: ", style: style1),
-                                Text(quizes[i].subject, style: style2),
+                                Text(i.subject, style: style2),
                                 ]
                                ),
                             Row(
                             children: [
                                 Text("Accuracy: ", style: style1),
-                                Text(quizes[i].accuracy.toString(), style: style2),
+                                Text(i.accuracy.toString(), style: style2),
                             ]),
                             ElevatedButton.icon(
                                 onPressed: () {
                                 Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => const QuizScreen(title: "Quiz"))
+                                        MaterialPageRoute(builder: (context) => QuizHistoryScreen(id: i.id))
                                         );
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -89,9 +93,12 @@ class HistoryList {
                             ),
                           ),
                           ),
-                    ),
+                    );
+                    }).toList(),
+                    ]),
                     ],
                     )
                 );
     }
+
 }
