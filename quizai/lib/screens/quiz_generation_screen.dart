@@ -83,7 +83,7 @@ class _QuizGenerationScreenState extends State<QuizGenerationScreen> {
         prompt += '"name": "$_selectedSubject",';
         prompt += '"level": $deg,';
         prompt += '"difficulty": $diff,';
-        if (_selectedClass != null) prompt += '"class": $_selectedClass,';
+        if (_selectedClass != null) prompt += '"level_class": $_selectedClass,';
         if (_selectedQuestion != null) prompt += '"question": "$_selectedQuestion"';
         prompt += "}";
 

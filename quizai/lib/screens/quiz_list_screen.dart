@@ -30,7 +30,16 @@ class _QuizListState extends State<QuizList> {
        List<QuizItem> items = [];
 
        for (var quiz in quizList) {
-               items.add(QuizItem(id: quiz["id"], level:quiz["difficulty"].toString() + "/4", finishedQuizzes: quiz["id"], subject: AppUtils.toUtf16(quiz["name"])));
+               items.add(QuizItem(
+                    id: quiz["id"], 
+                    level:quiz["difficulty"].toString() + "/4", 
+                    finishedQuizzes: quiz["id"], 
+                    subject: AppUtils.toUtf16(quiz["name"]),
+                    numberofQuestions: quiz["number_of_questions"],
+                    levelClass: quiz['level_class'] ?? null,
+                    difficulty: quiz["difficulty"],
+                    question: quiz['question'] ?? null,
+                    ));
               }
 
        fnc(items);
@@ -161,12 +170,20 @@ class QuizItem {
   final String subject;
   final int finishedQuizzes;
   final String level;
+  final String? question;
+  final int difficulty;
+  final int? levelClass;
+  final int numberofQuestions;
 
   QuizItem({
     required this.id,
     required this.subject,
     required this.finishedQuizzes,
     required this.level,
+    required this.question,
+    required this.difficulty,
+    required this.levelClass,
+    required this.numberofQuestions,
   });
 }
 
