@@ -23,7 +23,7 @@ class HistoryList {
         List<HistoryQuiz> list = [];
         var response = await Session.getMultiple("api/history/quiz");
 
-        for (int i = 0; i < response.length; i++) {
+        for (int i = response.length-1; i >= 0; i--) {
             HistoryQuiz quiz = HistoryQuiz();
             quiz.createFromResponse(response[i]);
             list.add(quiz);

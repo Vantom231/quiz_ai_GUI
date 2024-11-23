@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizai/models/question.dart';
+import 'package:quizai/screens/loading_screen.dart';
 import 'package:quizai/screens/quiz_finished_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 import 'package:quizai/utils/session.dart';
@@ -26,6 +27,28 @@ class _QuizScreenState extends State<QuizScreen> {
     List<Question> questionsList = [Question().loadNew("","","","","","a")];
 
     final double _quizFormWidth = 600;
+
+
+    @override
+      void initState() {
+        super.initState();
+
+        if (!_isQuizGenerated) {
+            buildQuestions((list) {
+                    Navigator.pop(context);
+                    setState(() {
+                            questionsList = list;
+                            _isQuizGenerated = true;
+                            });
+                    }, widget.id);
+        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoadingScreen()),
+                        );
+                });
+             }
 
 
 
@@ -103,14 +126,7 @@ class _QuizScreenState extends State<QuizScreen> {
         Widget build(BuildContext context) {
             //_screenWidth = MediaQuery.sizeOf(context).width;
 
-            if (!_isQuizGenerated) {
-                buildQuestions((list) {
-                    setState(() {
-                        questionsList = list;
-                        _isQuizGenerated = true;
-                        });
-                    }, widget.id);
-            }
+                        
 
             return Scaffold(
                 backgroundColor: AppTheme.dark,

@@ -16,10 +16,18 @@ class _QuizGenerationScreenState extends State<QuizGenerationScreen> {
     final List<String> _subjects = ["biologia", "fizyka", "informatyka", "język angielski"];
     final List<String> _degrees = ["szkoła podstawowa", "liceum", "studia inżynierskie/licencjackie", "studia magisterskie"];
     final List<String> _difficulties = ["bardzo łatwe", "łatwe", "średnie", "trudne", "bardzo trudne"];
-
+    final Map<String, dynamic> _degreesToClasses = {
+        "szkoła podstawowa": 8,
+        "liceum": 5,
+        "studia inżynierskie/licencjackie": 4,
+        "studia magisterskie": 2,
+    };
+    
     String? _selectedSubject;
+    String? _selectedQuestion;
     String? _selectedDegree;
     String? _selectedDifficulty;
+    int? _selectedClass;
     int _numberOfQuestions = 10;
 
     final TextEditingController _customSubjectController = TextEditingController();
@@ -29,23 +37,25 @@ class _QuizGenerationScreenState extends State<QuizGenerationScreen> {
             context: context,
             builder: (context) => AlertDialog(
                 backgroundColor: AppTheme.bg,
-                title: Text("Enter Custom Subject", style: TextStyle(color: AppTheme.primary)),
+                title: Text("Enter Custom Subject", style: TextStyle(color: AppTheme.white)),
                 content: TextField(
                     controller: _customSubjectController,
+                    style: TextStyle(color: AppTheme.white),
                     decoration: InputDecoration(
                         hintText: "Custom Subject",
-                        hintStyle: TextStyle(color: AppTheme.secondary),
+                        hintStyle: TextStyle(color: AppTheme.white),
                     ),
                 ),
                 actions: [
                     TextButton(
-                        child: Text("Cancel", style: TextStyle(color: AppTheme.secondary)),
+                        child: Text("Cancel", style: TextStyle(color: AppTheme.white)),
                         onPressed: () => Navigator.pop(context),
                     ),
                     TextButton(
-                        child: Text("Add", style: TextStyle(color: AppTheme.primary)),
+                        child: Text("Add", style: TextStyle(color: AppTheme.white)),
                         onPressed: () {
                             setState(() {
+                                _subjects.add(_customSubjectController.text);
                                 _selectedSubject = _customSubjectController.text;
                             });
                             _customSubjectController.clear();
@@ -68,7 +78,17 @@ class _QuizGenerationScreenState extends State<QuizGenerationScreen> {
         int diff = _findIndex(_selectedDifficulty, _difficulties);
         int deg = _findIndex(_selectedDegree, _degrees);
 
-        await Session.post('api/subject' ,'{"number_of_questions":$_numberOfQuestions, "name": "$_selectedSubject", "level": $deg, "difficulty": $diff}');
+        String prompt = "{";
+        prompt += '"number_of_questions": $_numberOfQuestions,';
+        prompt += '"name": "$_selectedSubject",';
+        prompt += '"level": $deg,';
+        prompt += '"difficulty": $diff,';
+        if (_selectedClass != null) prompt += '"class": $_selectedClass,';
+        if (_selectedQuestion != null) prompt += '"question": "$_selectedQuestion"';
+        prompt += "}";
+
+
+        await Session.post('api/subject' ,prompt);
 
         refresh();
     }
@@ -132,6 +152,21 @@ class _QuizGenerationScreenState extends State<QuizGenerationScreen> {
                                       ),
                                   ],
                               ),
+                              _selectedSubject != null? TextField(
+                                    style: TextStyle(color: AppTheme.white),
+                                    decoration: InputDecoration(
+                                        labelText: "Temat (opcjonalnie)",
+                                        labelStyle: TextStyle(color: AppTheme.white),
+                                        filled: true,
+                                        fillColor: AppTheme.secondary,
+                                    ),
+                                    onChanged: (value) {
+                                        setState( () {
+                                                _selectedQuestion = value;
+                                            });
+                                    }
+                                 ): Container(),
+
                               SizedBox(height: 16.0),
                               DropdownButtonFormField<String>(
                                   dropdownColor: AppTheme.secondary,
@@ -151,10 +186,35 @@ class _QuizGenerationScreenState extends State<QuizGenerationScreen> {
                                   }).toList(),
                                   onChanged: (value) {
                                       setState(() {
+                                          _selectedClass = null;
                                           _selectedDegree = value;
                                       });
                                   },
                               ),
+
+                              _selectedDegree != null ? DropdownButtonFormField<int>(
+                                  dropdownColor: AppTheme.secondary,
+                                  style: TextStyle(color: AppTheme.white),
+                                  decoration: InputDecoration(
+                                      labelText: _degreesToClasses[_selectedDegree] < 5? "Rok (opcjonalnie)": "Klasa (opcjonalnie)",
+                                      labelStyle: TextStyle(color: AppTheme.white),
+                                      filled: true,
+                                      fillColor: AppTheme.secondary,
+                                  ),
+                                  value: _selectedClass,
+                                  items: List.generate(_degreesToClasses[_selectedDegree], (index) => 1 + index).map((number) {
+                                      return DropdownMenuItem(
+                                          value: number,
+                                          child: Text(number.toString()),
+                                      );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                      setState(() {
+                                          _selectedClass = value;
+                                      });
+                                  },
+                              ): Container(),
+
                               SizedBox(height: 16.0),
                               DropdownButtonFormField<String>(
                                   dropdownColor: AppTheme.secondary,

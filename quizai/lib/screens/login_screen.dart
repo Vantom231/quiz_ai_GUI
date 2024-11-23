@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizai/screens/home_screen.dart';
+import 'package:quizai/screens/register_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 
 import '../utils/session.dart';
@@ -63,6 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
 
+        loginController.clear();
+        passwordController.clear();
         Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomeScreen(title: "QuizAI"))
@@ -158,8 +161,25 @@ class _LoginScreenState extends State<LoginScreen> {
                             Padding(
                                 padding: EdgeInsets.all(10.0), 
                                 child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
+
+                                    ElevatedButton.icon(
+                                        label: Text("Rejestracja", style: TextStyle(color: AppTheme.white)),
+                                        icon: Icon(Icons.login),
+                                        iconAlignment: IconAlignment.end,
+                                        style: ElevatedButton.styleFrom(
+                                            iconColor: AppTheme.white,
+                                            textStyle: TextStyle(color: AppTheme.white),
+                                            backgroundColor: AppTheme.secondary,
+                                        ),
+                                        onPressed: () {
+                                        Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => const RegistrationScreen())
+                                                );
+                                        }
+                                        ),
 
                                     ElevatedButton.icon(
                                         label: Text("Zaloguj", style: TextStyle(color: AppTheme.white)),

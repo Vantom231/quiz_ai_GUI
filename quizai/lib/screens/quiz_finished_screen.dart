@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizai/models/question.dart';
+//import 'package:quizai/screens/quiz_resoult_screen.dart';
 import 'package:quizai/utils/session.dart';
 
 
@@ -57,8 +58,18 @@ class _QuizFinishedScreenState extends State<QuizFinishedScreen> {
 
         int quantity = questionList.length;
 
-        Session.post("api/history/quiz/$quizId/questions", prompt);
-        Session.post("api/subject/$subjectId/resoults", '{"accuracy":$accuracy,"questions_quantity":$quantity}');
+        Future<dynamic> res1 = Session.post("api/history/quiz/$quizId/questions", prompt);
+        Future<dynamic> res2 = Session.post("api/subject/$subjectId/resoults", '{"accuracy":$accuracy,"questions_quantity":$quantity}');
+
+        await res1;
+        await res2;
+
+//        Navigator.pop(context);
+//        Navigator.push(
+//        context,
+//        MaterialPageRoute(builder: (context) => QuizResultScreen())
+//        );
+        
 
 
     }

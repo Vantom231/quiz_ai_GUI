@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:quizai/screens/history_list.dart';
 import 'package:quizai/screens/quiz_generation_screen.dart';
 import 'package:quizai/screens/quiz_list_screen.dart';
+import 'package:quizai/screens/welcome_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 
 
@@ -160,10 +162,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     List<Widget> buildList(BuildContext context) {
         return <Widget>[
-            const Text(
-                    'Index 0: Home',
-                    style: optionStyle,
-                    ),
+                  ConstrainedBox(
+                          constraints: BoxConstraints(
+                              minWidth: 900,
+                              maxWidth: 1000,
+                              minHeight: 500,
+                              maxHeight: 600,
+                              ),
+                          child: DashboardScreen(),
+                          ),// history view
                   // Quiz Generation view
                   ConstrainedBox(
                           constraints: BoxConstraints(
@@ -182,7 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               maxHeight: 600,
                               ),
                           child: historyList,
-                          )
+                          ),
+                Text("settings", style:TextStyle(color:AppTheme.white)),
+
                       ];
     }
 
@@ -288,7 +297,7 @@ Widget build(BuildContext context) {
                                 selected: _selectedIndex == 3,
                                 onTap: () {
                                 // Update the state of the app
-                                _onItemTapped(2);
+                                _onItemTapped(3);
                                 // Then close the drawer
                                 Navigator.pop(context);
                                 },
@@ -302,9 +311,8 @@ Widget build(BuildContext context) {
                                 selectedColor: AppTheme.accent,
                                 selected: _selectedIndex == 4,
                                 onTap: () {
-                                // Update the state of the app
-                                _onItemTapped(2);
                                 // Then close the drawer
+                                Navigator.pop(context);
                                 Navigator.pop(context);
                                 },
                                 ),
@@ -317,10 +325,7 @@ Widget build(BuildContext context) {
                                 selectedColor: AppTheme.accent,
                                 selected: _selectedIndex == 5,
                                 onTap: () {
-                                // Update the state of the app
-                                _onItemTapped(2);
-                                // Then close the drawer
-                                Navigator.pop(context);
+                                    exit(0);
                                 },
                                 ),
 
