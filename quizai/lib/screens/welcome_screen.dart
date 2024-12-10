@@ -74,18 +74,40 @@ class DashboardScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Kafelek: Ukończone quizy
-                  StatTile(
-                    title: "Ukończone quizy",
-                    value: completedQuizzes.toString(),
-                    backgroundColor: AppTheme.secondary,
+                  Expanded(
+                    child: StatTile(
+                      title: "Ukończone quizy",
+                      value: completedQuizzes.toString(),
+                      backgroundColor: AppTheme.secondary,
+                    ),
                   ),
                   SizedBox(height: 16),
                   
                   // Kafelek: Streak
-                  StatTile(
-                    title: "Dni streak",
-                    value: streakDays.toString(),
-                    backgroundColor: AppTheme.accent,
+                  Expanded(
+                    child: StatTile(
+                      title: "Ilość tematów aktywnych",
+                      value: streakDays.toString(),
+                      backgroundColor: AppTheme.accent,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  
+                  Expanded(
+                    child: StatTile(
+                      title: "Ilość tematów stworzonych",
+                      value: completedQuizzes.toString(),
+                      backgroundColor: AppTheme.secondary,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+
+                  Expanded(
+                    child: StatTile(
+                      title: "Ilość quizów wygenerowanych",
+                      value: streakDays.toString(),
+                      backgroundColor: AppTheme.accent,
+                    ),
                   ),
                   SizedBox(height: 16),
                   
@@ -96,31 +118,35 @@ class DashboardScreen extends StatelessWidget {
                       color: AppTheme.secondary,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text(
-                          "Imię: $firstName",
-                          style: TextStyle(
-                            color: AppTheme.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Nazwisko: $lastName",
-                          style: TextStyle(
-                            color: AppTheme.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Nick: $nickname",
-                          style: TextStyle(
-                            color: AppTheme.white,
-                            fontSize: 16,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Imię: $firstName",
+                              style: TextStyle(
+                                color: AppTheme.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              "Nazwisko: $lastName",
+                              style: TextStyle(
+                                color: AppTheme.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              "Nick: $nickname",
+                              style: TextStyle(
+                                color: AppTheme.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

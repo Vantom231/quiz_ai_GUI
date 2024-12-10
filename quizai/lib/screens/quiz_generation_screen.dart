@@ -78,17 +78,16 @@ class _QuizGenerationScreenState extends State<QuizGenerationScreen> {
         int diff = _findIndex(_selectedDifficulty, _difficulties);
         int deg = _findIndex(_selectedDegree, _degrees);
 
-        String prompt = "{";
-        prompt += '"number_of_questions": $_numberOfQuestions,';
-        prompt += '"name": "$_selectedSubject",';
-        prompt += '"level": $deg,';
-        prompt += '"difficulty": $diff,';
-        if (_selectedClass != null) prompt += '"level_class": $_selectedClass,';
-        if (_selectedQuestion != null) prompt += '"question": "$_selectedQuestion"';
-        prompt += "}";
+        var body = {
+        "number_of_questions": _numberOfQuestions,
+        "name": _selectedSubject,
+        "level": deg,
+        "difficulty":diff,
+        "level_class": _selectedClass ?? null,
+        "question": _selectedQuestion ?? null,
+        };
 
-
-        await Session.post('api/subject' ,prompt);
+        await Session.post2obj('api/subject' ,body);
 
         refresh();
     }

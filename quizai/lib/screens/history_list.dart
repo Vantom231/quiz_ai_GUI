@@ -60,19 +60,19 @@ class HistoryList {
                             children: [
                             Row(
                                 children: [
-                                Text("number: ", style: style1),
+                                Text("numer: ", style: style1),
                                 Text(i.number.toString(), style: style2),
                                 ]
                                ),
                             Row(
                                 children: [
-                                Text("Subject: ", style: style1),
+                                Text("Przedmiot: ", style: style1),
                                 Text(i.subject, style: style2),
                                 ]
                                ),
                             Row(
                             children: [
-                                Text("Accuracy: ", style: style1),
+                                Text("Poprawne: ", style: style1),
                                 Text(i.accuracy.toString(), style: style2),
                             ]),
                             ElevatedButton.icon(
@@ -85,7 +85,7 @@ class HistoryList {
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.accent,
                                 ),
-                                label: Text("check Anwsers", style: TextStyle(color: AppTheme.white),textAlign: TextAlign.center,),
+                                label: Text("Otwórz", style: TextStyle(color: AppTheme.white),textAlign: TextAlign.center,),
                                 icon: Icon(Icons.arrow_right, color: AppTheme.white),
                                 iconAlignment: IconAlignment.end,
                             )

@@ -18,7 +18,7 @@ class HistoryQuiz {
     void createFromResponse(res) {
         id = res["id"];
         number = res["number"];
-        subject = AppUtils.toUtf16(res["subject"]);
+        subject = res["subject"];
         accuracy = res["accuracy"];
     }
 

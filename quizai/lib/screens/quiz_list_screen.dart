@@ -14,6 +14,9 @@ class _QuizListState extends State<QuizList> {
   List<QuizItem> quizItems = [];
   bool _isListCreated = false;
 
+  final List<String> _degrees = ["szkoła podstawowa", "liceum", "studia inżynierskie/licencjackie", "studia magisterskie"];
+  final List<String> _difficulties = ["bardzo łatwe", "łatwe", "średnie", "trudne", "bardzo trudne"];
+
   QuizItem? selectedQuizItem;
 
   void _deleteQuizItem(QuizItem item) async {
@@ -32,13 +35,13 @@ class _QuizListState extends State<QuizList> {
        for (var quiz in quizList) {
                items.add(QuizItem(
                     id: quiz["id"], 
-                    level:quiz["difficulty"].toString() + "/4", 
-                    finishedQuizzes: quiz["id"], 
-                    subject: AppUtils.toUtf16(quiz["name"]),
+                    level: quiz["level"], 
+                    finishedQuizzes: quiz["number_finished"], 
+                    subject: quiz["name"],
                     numberofQuestions: quiz["number_of_questions"],
                     levelClass: quiz['level_class'] ?? null,
                     difficulty: quiz["difficulty"],
-                    question: quiz['question'] ?? null,
+                    question: quiz['question'] ?? 'brak',
                     ));
               }
 
@@ -88,23 +91,67 @@ class _QuizListState extends State<QuizList> {
           Expanded(
             child: SingleChildScrollView(
               child: DataTable(
+                dividerThickness: 0.5,
+                showCheckboxColumn: false,
                 columns: const <DataColumn>[
                   DataColumn(
-                    label: Text(
-                      "Temat",
-                      style: TextStyle(color: Colors.white),
+                    label: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Przedmiot",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Temat",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
                     ),
                   ),
                   DataColumn(
-                    label: Text(
-                      "Id",
-                      style: TextStyle(color: Colors.white),
+                    label: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Poziom krztałcenia",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Klasa/Rok",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
                     ),
                   ),
                   DataColumn(
-                    label: Text(
-                      "Poziom",
-                      style: TextStyle(color: Colors.white),
+                    label: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Id",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Ilość pytań",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Trudność",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Ilość wykonanych",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                   DataColumn(
@@ -123,9 +170,44 @@ class _QuizListState extends State<QuizList> {
                       });
                     },
                     cells: <DataCell>[
-                      DataCell(Text(quizItem.subject, style: TextStyle(color: Colors.white))),
-                      DataCell(Text(quizItem.finishedQuizzes.toString(), style: TextStyle(color: Colors.white))),
-                      DataCell(Text(quizItem.level, style: TextStyle(color: Colors.white))),
+                      DataCell(
+                        SizedBox(
+                          width: 300,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(quizItem.subject, style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis),
+                              Text(quizItem.question ?? "brak", style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis),
+                            ],
+                          ),
+                        )
+                      ),
+                      DataCell(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(_degrees[quizItem.level], style: TextStyle(color: Colors.white)),
+                            Text(quizItem.levelClass?.toString() ?? "brak", style: TextStyle(color: Colors.white)),
+                          ],
+                        )
+                      ),
+                      DataCell(
+                        Column(
+                          children: [
+                            Text(quizItem.id.toString(), style: TextStyle(color: Colors.white)),
+                            Text(quizItem.numberofQuestions.toString(), style: TextStyle(color: Colors.white)),
+                          ],
+                        )
+                      ),
+                      DataCell(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(_difficulties[quizItem.difficulty], style: TextStyle(color: Colors.white)),
+                            Text(quizItem.finishedQuizzes.toString(), style: TextStyle(color: Colors.white)),
+                          ],
+                        )
+                      ),
                       DataCell(
                         IconButton(
                           icon: Icon(Icons.close, color: Colors.red),
@@ -169,7 +251,7 @@ class QuizItem {
   final int id;
   final String subject;
   final int finishedQuizzes;
-  final String level;
+  final int level;
   final String? question;
   final int difficulty;
   final int? levelClass;

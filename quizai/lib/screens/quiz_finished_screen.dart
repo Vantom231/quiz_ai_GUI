@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gauge_indicator/gauge_indicator.dart';
 import 'package:quizai/models/question.dart';
+import 'package:quizai/utils/app_styles.dart';
 //import 'package:quizai/screens/quiz_resoult_screen.dart';
 import 'package:quizai/utils/session.dart';
 
@@ -44,7 +46,9 @@ class _QuizFinishedScreenState extends State<QuizFinishedScreen> {
         Map<dynamic, dynamic> res = await Session.get("api/subject/$subjectId");
         String subjectName = res['name'];
 
-        Map<dynamic, dynamic> quizRes = await Session.post2("api/history/quiz", '{ "number": 0, "subject": "$subjectName", "accuracy":$accuracy}');
+        var body = {"number": 0, "subject": subjectName, "accuracy": accuracy};
+
+        Map<dynamic, dynamic> quizRes = await Session.post2obj("api/history/quiz", body);
         int quizId = quizRes['id'];
 
         String prompt = "[";
@@ -64,14 +68,6 @@ class _QuizFinishedScreenState extends State<QuizFinishedScreen> {
         await res1;
         await res2;
 
-//        Navigator.pop(context);
-//        Navigator.push(
-//        context,
-//        MaterialPageRoute(builder: (context) => QuizResultScreen())
-//        );
-        
-
-
     }
 
     @override
@@ -80,10 +76,10 @@ class _QuizFinishedScreenState extends State<QuizFinishedScreen> {
             if (!_isProcessed) {
                 process(widget.quesitonList, (total, correct, accuracy) {setState(
                             () {
-                                totalQuestionNumber = total;
-                                correctQuestionNumber = correct;
-                                this.accuracy = accuracy;
-                                _isProcessed = true;
+                            totalQuestionNumber = total;
+                            correctQuestionNumber = correct;
+                            this.accuracy = accuracy;
+                            _isProcessed = true;
                             }
                             );
                         });
@@ -91,25 +87,69 @@ class _QuizFinishedScreenState extends State<QuizFinishedScreen> {
             }
 
             return Scaffold(
-             body: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("correctly anwsered: $correctQuestionNumber/$totalQuestionNumber"),
-                    Text("accuracy: $accuracy"),
-                    ElevatedButton(
-                    child: Text("back"),
-                    onPressed: () {
-                        Navigator.pop(context);
-                        widget.refresh();
-                    }
-                    )
-                  ]
-                  )
-                ]
-             )
-            );
+                    backgroundColor: AppTheme.bg,
+                    body: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                            const Text(
+                                "Wynik:",
+                                style: TextStyle(
+                                    color: AppTheme.accent, 
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    ),
+                                ),
+                            SizedBox(height: 30),
+
+                            AnimatedRadialGauge(
+                                duration: const Duration(),
+                                curve: Curves.elasticOut,
+                                value: correctQuestionNumber.toDouble(),
+                                radius: 200,
+
+                                axis: GaugeAxis(
+                                    min: 0,
+                                    max: totalQuestionNumber.toDouble(),
+                                    degrees: 180,
+
+                                    style: const GaugeAxisStyle(
+                                        thickness: 20,
+                                        background: AppTheme.accent,
+                                        segmentSpacing: 4,
+                                        ),
+                                    pointer: GaugePointer.needle(
+                                        width: 16,
+                                        height: 200,
+                                        borderRadius: 16,
+                                        color: AppTheme.white,
+                                        ),
+                                    ),
+                                ),
+                                SizedBox(height: 30),
+
+                                Text("ilość poprawnych odpowiedzi: $correctQuestionNumber/$totalQuestionNumber",style: const TextStyle(color: AppTheme.white)),
+                                Text("procent poprawnych odpowiedzi: $accuracy", style: const TextStyle(color: AppTheme.white)),
+                                SizedBox(height: 30),
+
+                                ElevatedButton(
+                                        child: const Text("powrót"),
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppTheme.accent,
+                                            foregroundColor: AppTheme.white,
+                                            ),
+                                        onPressed: () {
+                                        Navigator.pop(context);
+                                        widget.refresh();
+                                        }
+                                        )
+                                    ]
+                                    )
+                                    ]
+                                    )
+                                    );
         }
 }
+ 

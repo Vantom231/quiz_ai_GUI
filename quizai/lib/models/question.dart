@@ -64,12 +64,12 @@ class Question {
 
     //loads data from /api/subject/{id}/generate API response
     Question loadNewGenerated(res) {
-        this.question = _toUtf16(res['q']);
-        this.anwserA = _toUtf16(res['a']);
-        this.anwserB = _toUtf16(res['b']);
-        this.anwserC = _toUtf16(res['c']);
-        this.anwserD = _toUtf16(res['d']);
-        this.correctAnwser = _findAnwser(_toUtf16(res['anw']));
+        this.question = res['q'];
+        this.anwserA = res['a'];
+        this.anwserB = res['b'];
+        this.anwserC = res['c'];
+        this.anwserD = res['d'];
+        this.correctAnwser = _findAnwser(res['anw']);
         this.selectedAnwser = Anwsers.N;
 
         return this;
@@ -78,13 +78,13 @@ class Question {
     
     //loads data from /api/history/quiz/{id}/questions API response
     Question loadHistory(res) {
-        this.question = _toUtf16(res['question']);
-        this.anwserA = _toUtf16(res['anw_a']);
-        this.anwserB = _toUtf16(res['anw_b']);
-        this.anwserC = _toUtf16(res['anw_c']);
-        this.anwserD = _toUtf16(res['anw_d']);
-        this.correctAnwser = _findAnwser(_toUtf16(res['anw_correct']));
-        this.selectedAnwser = _findAnwser(_toUtf16(res['anw']));
+        this.question = res['question'];
+        this.anwserA = res['anw_a'];
+        this.anwserB = res['anw_b'];
+        this.anwserC = res['anw_c'];
+        this.anwserD = res['anw_d'];
+        this.correctAnwser = _findAnwser(res['anw_correct']);
+        this.selectedAnwser = _findAnwser(res['anw']);
 
         return this;
     }

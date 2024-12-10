@@ -19,7 +19,7 @@ class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
    
     bool _isQuizGenerated = false;      // indicated if Api was fetched or not
     int _selectedQuestion = 0;          // id of current displayed question
-    String _subject = "Math (hehe)";
+    String _subject = "Quiz";
 
     //question list with some placeholder before fetching from API
     List<Question> questionsList = [Question().loadNew("","","","","","a")];
@@ -137,21 +137,6 @@ class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
                                       ),
                                       ]
                                       ),
-                                      SizedBox(
-                                          width: _quizFormWidth,
-                                          child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children:[
-                                              Text("Subject: $_subject", style:
-                                                  const TextStyle(
-                                                      color: AppTheme.accent,
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 25,
-                                                      )
-                                                  )
-                                              ]
-                                              ),
-                                          ),
                                       Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
