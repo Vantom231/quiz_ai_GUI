@@ -18,6 +18,7 @@ class Session {
         Uri uri = Uri(scheme: "http", host:"127.0.0.1", path:path, port:8000);
         http.Response response = await http.get(uri, headers: headers);
         updateCookie(response);
+        print(utf8.decode(response.bodyBytes));
         return json.decode(utf8.decode(response.bodyBytes));
     }
 

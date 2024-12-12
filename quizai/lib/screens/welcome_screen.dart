@@ -1,24 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:quizai/utils/app_styles.dart';
+import 'package:quizai/utils/session.dart';
 
 
-class DashboardScreen extends StatelessWidget {
-  final List<String> topics = [
+class Dashboard{
+
+    bool isFetched = false;
+
+  List<String> topics = [
     "Język Polski",
     "Język Angielski",
     "Informatyka",
     "Matematyka",
   ];
 
-  final String firstName = "Jan";
-  final String lastName = "Kowalski";
-  final String nickname = "Janek123";
+  String firstName = "Jan";
+  String lastName = "Kowalski";
+  String nickname = "Janek123";
 
-  final int completedQuizzes = 12;
-  final int streakDays = 5;
+  int completedQuizzes = 0;
+  int activeSubjects = 1;
+  int createdSubjects = 2;
+  int quizesGenerated = 3;
 
-  @override
-  Widget build(BuildContext context) {
+      
+
+  Future<Widget> build(BuildContext context) async {
+
+      Future<Map<dynamic, dynamic>> dashboardPromise = Session.get('api/user/dashboard');
+      Future<List<dynamic>> subjectListPromise = Session.getMultiple('api/subject');
+
+      Map<dynamic, dynamic> dashboard = await  dashboardPromise;
+
+      firstName = dashboard["name"];
+      lastName = dashboard["email"];
+      nickname = "janek123";
+
+      completedQuizzes = dashboard["finished_quizes"];
+      activeSubjects = dashboard['subject_active'];
+      createdSubjects = dashboard['subject_created'];
+      quizesGenerated = dashboard['quizes_generated'];
+      
+      List<dynamic> subjectList = await subjectListPromise;
+      
+      List<String> tempList = [];
+
+      for (var subj in subjectList) {
+              tempList.add(subj["name"]); 
+            }
+
+      topics = tempList;
+
     return Scaffold(
       body: Row(
         children: [
@@ -87,7 +119,7 @@ class DashboardScreen extends StatelessWidget {
                   Expanded(
                     child: StatTile(
                       title: "Ilość tematów aktywnych",
-                      value: streakDays.toString(),
+                      value: activeSubjects.toString(),
                       backgroundColor: AppTheme.accent,
                     ),
                   ),
@@ -96,7 +128,7 @@ class DashboardScreen extends StatelessWidget {
                   Expanded(
                     child: StatTile(
                       title: "Ilość tematów stworzonych",
-                      value: completedQuizzes.toString(),
+                      value: createdSubjects.toString(),
                       backgroundColor: AppTheme.secondary,
                     ),
                   ),
@@ -105,7 +137,7 @@ class DashboardScreen extends StatelessWidget {
                   Expanded(
                     child: StatTile(
                       title: "Ilość quizów wygenerowanych",
-                      value: streakDays.toString(),
+                      value: quizesGenerated.toString(),
                       backgroundColor: AppTheme.accent,
                     ),
                   ),

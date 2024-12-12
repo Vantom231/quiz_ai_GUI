@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     int _selectedIndex = 0;
 
     Widget historyList = Text("if you seeing this, means that must be an error :("); 
+    Widget dashboardScreen = Text("if you seeing this, means that must be an error :(");
 
     // Quiz Screen
     int _selectedQuestion = 1;
@@ -40,6 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
                 historyList = temp;
                 });
+    }
+    
+    void _buildDashboard(context) async{
+        Widget temp = await Dashboard().build(context);
+        setState(() {
+                dashboardScreen = temp;
+            });
     }
 
     Widget questionIndicatorButton(int questionNumber) {
@@ -107,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               minHeight: 500,
                               maxHeight: 600,
                               ),
-                          child: DashboardScreen(),
+                          child: dashboardScreen,
                           ),// history view
                   // Quiz Generation view
                   ConstrainedBox(
@@ -187,6 +195,7 @@ Widget build(BuildContext context) {
                             selected: _selectedIndex == 0,
                             onTap: () {
                             // Update the state of the app
+                            _buildDashboard(context);
                             _onItemTapped(0);
                             // Then close the drawer
                             Navigator.pop(context);
