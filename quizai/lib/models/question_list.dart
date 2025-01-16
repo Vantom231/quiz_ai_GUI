@@ -6,7 +6,7 @@ class QeustionList {
     void build(res) {
         for (int i = 0; i < res.length; i++) {
             Question qw = Question();
-            qw.build(res[i]);
+            //qw.build(res[i]);
             questions.add(qw);
         }
     }

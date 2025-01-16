@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:quizai/screens/quiz_generation_screen.dart';
 import 'package:quizai/screens/quiz_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
-import 'package:quizai/utils/app_utils.dart';
 import 'package:quizai/utils/session.dart';
 
 class QuizList extends StatefulWidget {

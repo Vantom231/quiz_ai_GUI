@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quizai/screens/home_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() {

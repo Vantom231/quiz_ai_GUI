@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:quizai/screens/history_list.dart';
-import 'package:quizai/screens/quiz_generation_screen.dart';
 import 'package:quizai/screens/quiz_list_screen.dart';
 import 'package:quizai/screens/welcome_screen.dart';
 import 'package:quizai/utils/app_styles.dart';

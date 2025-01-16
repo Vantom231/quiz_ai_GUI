@@ -1,11 +1,8 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:quizai/screens/history_quiz_screen.dart';
-import 'package:quizai/screens/quiz_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 import 'package:quizai/models/history_quiz.dart';
-import 'package:quizai/utils/app_utils.dart';
 import 'package:quizai/utils/session.dart';
 
 class HistoryList {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quizai/models/question.dart';
-import 'package:quizai/screens/quiz_finished_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 import 'package:quizai/utils/session.dart';
 
@@ -19,7 +18,6 @@ class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
    
     bool _isQuizGenerated = false;      // indicated if Api was fetched or not
     int _selectedQuestion = 0;          // id of current displayed question
-    String _subject = "Quiz";
 
     //question list with some placeholder before fetching from API
     List<Question> questionsList = [Question().loadNew("","","","","","a")];

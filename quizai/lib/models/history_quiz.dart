@@ -1,4 +1,3 @@
-import '../utils/app_utils.dart';
 
 class HistoryQuiz {
     int id = -1;

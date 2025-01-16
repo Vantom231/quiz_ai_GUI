@@ -21,7 +21,6 @@ class _QuizScreenState extends State<QuizScreen> {
    
     bool _isQuizGenerated = false;      // indicated if Api was fetched or not
     int _selectedQuestion = 0;          // id of current displayed question
-    String _subject = "Quiz";
 
     //question list with some placeholder before fetching from API
     List<Question> questionsList = [Question().loadNew("","","","","","a")];
