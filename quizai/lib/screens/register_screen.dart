@@ -158,6 +158,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             onPressed: handleRegistration,
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: ElevatedButton.icon(
+            label: const Text(
+              "Powrót",
+              style: TextStyle(color: AppTheme.white),
+            ),
+            icon: const Icon(Icons.arrow_left),
+            iconAlignment: IconAlignment.end,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.secondary,
+            ),
+            onPressed: () {
+                Navigator.pop(context);
+            },
+          ),
+        ),
       ],
     );
   }

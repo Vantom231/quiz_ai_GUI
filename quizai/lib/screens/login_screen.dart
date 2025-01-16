@@ -76,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
     
     Widget _loginForm() {
         return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                         Padding(
                             padding: EdgeInsets.all(10.0),
@@ -210,8 +211,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                             Expanded(child: Column()),
                             Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                              children: [
-                             Expanded(child: Row()),
                              Row(
                                 children: [
                                 ConstrainedBox(
@@ -225,7 +226,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 ],
                              ),
-                             Expanded(child: Row()),
                              ],
                             ),
                             Expanded(child: Column()),

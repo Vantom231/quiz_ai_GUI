@@ -6,6 +6,8 @@ import 'package:quizai/screens/quiz_list_screen.dart';
 import 'package:quizai/screens/welcome_screen.dart';
 import 'package:quizai/utils/app_styles.dart';
 
+bool isDashboardBuild = false;
+
 
 class HomeScreen extends StatefulWidget {
     const HomeScreen ({super.key, required this.title});
@@ -142,6 +144,11 @@ class _HomeScreenState extends State<HomeScreen> {
 @override
 Widget build(BuildContext context) {
     List<Widget> widgetOptions = buildList(context);     
+
+    if (!isDashboardBuild) {
+      _buildDashboard(context);
+      isDashboardBuild = true;
+    }
 
     return Scaffold(
             backgroundColor: AppTheme.bg,
